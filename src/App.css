@@ -85,3 +85,31 @@ button {
   font-size: 16px;
   outline: none;
 }
+
+.card button {
+  margin: 5px;
+}
+
+.active-hot {
+  background: #ff914d;
+  color: white;
+}
+
+.active-cold {
+  background: #4da6ff ;
+  color: white ;
+
+}
+
+.active-sweet {
+  background-color: #8b5cf6 !important;
+  color: white !important;
+}
+
+.order-card {
+  background: white;
+  padding: 16px;
+  margin-top: 12px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}

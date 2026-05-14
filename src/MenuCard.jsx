@@ -1,4 +1,9 @@
+import { useState} from "react";
+
 function MenuCard(props) {
+  const [drinkType, setDrinkType] = useState("Cold");
+  const [sweetness, setSweetness] = useState("Normal");
+
   return (
     <div className="card">
      
@@ -11,9 +16,49 @@ function MenuCard(props) {
 
        <h2>{props.name}</h2>
 
+       <button
+        className={drinkType === "Hot" ? "active-hot" : ""} 
+        onClick={() => setDrinkType("Hot")}> ☕ Hot</button>
+
+        <button
+         className={drinkType === "Cold" ? "active-cold" : ""}
+         onClick={() => setDrinkType("Cold")}> 🧊 Cold</button>
+
+         <div className="sweetness-options">  
+          <button
+          className={sweetness === "Normal" ? "active-sweet" : ""}
+          onClick={() => setSweetness("Normal")}>
+            Normal
+          </button>   
+
+           <button
+            className={sweetness === "Less Sweet" ? "active-sweet" : ""}
+            onClick={() => setSweetness("Less Sweet")}>
+            Less Sweet
+          </button>
+
+           <button
+            className={sweetness === "No Sugar" ? "active-sweet" : ""}
+            onClick={() => setSweetness("No Sugar")}>
+            No Sugar
+          </button>
+ </div>
+
+        <p>Selected: {drinkType}</p>
+        <p>Sweetness: {sweetness}</p>
+
        <p>{props.price} THB</p>
 
-       <button onClick={props.addToCart}>Add to Cart</button>
+       <button onClick={() =>
+        props.addToCart ({
+          id: props.id,
+          name: props.name,
+          price: props.price,
+          image: props.image,
+          type: drinkType,
+          sweetness: sweetness,
+        })
+        }>Add to Cart</button>
     </div>
   );
 }
