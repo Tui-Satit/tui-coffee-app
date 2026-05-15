@@ -4,14 +4,43 @@ import MenuCard from "./MenuCard";
 import americano from "./assets/americano.jpg";
 import latte from "./assets/latte.jpg";
 import cappuccino from "./assets/cappuccino.jpg"; 
+import { useEffect, useState } from "react";
 
-import { useState } from "react";
 
 function App() {
    const [cart, setCart] = useState([]);
    
    const [customerName, setCustomerName] = useState("");
    const [orders, setOrders] = useState([]);
+   const [orderNumber, setOrderNumber] = useState(1);
+   const [searchText, setSeachText] = useState("");
+
+   useEffect(() => {
+  const savedOrders = localStorage.getItem("orders");
+
+  if (savedOrders) {
+    setOrders(JSON.parse(savedOrders));
+  }
+
+  }, []);
+ 
+  useEffect(() => {
+    localStorage.setItem("orders",  JSON.stringify(orders));
+  },[orders]);
+
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cart");
+
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+  }, []);
+
+  useEffect(() => {
+      localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+
   const menu = [
     {
       id: 1,
@@ -95,6 +124,14 @@ function App() {
     setCart([]);
   };
 
+  const deleteOrder = (id) => {
+    const updatedOrders = orders.filter(
+      (order) => order.id !== id
+    );
+
+    setOrders(updatedOrders);
+
+  }
   const submitOrder = () => {
      if (customerName.trim() === "") {
       alert("Please enter customer name")
@@ -105,6 +142,7 @@ function App() {
       customerName: customerName,
       items: cart,
       total: totalPrice,
+      orderNumber: orderNumber,
     };
 
     setOrders([...orders, newOrder]);
@@ -112,6 +150,8 @@ function App() {
     setCart([]);
 
      setCustomerName("");
+
+     setOrderNumber(orderNumber + 1);
 
     alert("Order submitted ☕");
 
@@ -128,6 +168,27 @@ function App() {
   const totalItems = cart.reduce((sum, item) => {
     return sum + item.quantity;
   }, 0);
+
+  const filteredOrders = orders.filter((order) => 
+     order.customerName
+      .toLowerCase()
+      .includes(searchText.toLowerCase())
+  );
+
+  const totalOrders = orders.length;
+
+  const totalRevenue = orders.reduce((sum, order) => {
+    return sum + order.total;
+  }, 0);
+   
+  const totalCupsSold = orders.reduce((sum, order) => {
+    return (
+      sum + 
+      order.items.reduce((itemSum, item) => {
+        return itemSum + item.quantity;
+      }, 0)
+    );
+  }, 0)
 
   
 
@@ -186,24 +247,42 @@ function App() {
      
     ) )}
 
+    <input 
+          type="text"
+          placeholder="Search customer..."
+          value={searchText}
+          onChange={(e) => setSeachText(e.target.value)}
+    />
+
+    <div className="stats-box">
+        <h3>Total Orders: {totalOrders}</h3> 
+        <h3>Total Revenue: {totalRevenue}</h3>
+        <h3>Total Cups Sold: {totalCupsSold}</h3>
+    </div>
+
     <h2>Order History</h2>
 
     {orders.length === 0 ? (
       <p>No orders yet </p>
     ) : (
-      orders.map((order) => (
+        filteredOrders.map((order) => (
         <div key={order.id} className="order-card">
+          <h3>Order #{order.orderNumber}</h3>
           <h3>Customer: {order.customerName}</h3>
           <p>Total: {order.total} Baht</p>
+
+          <button onClick={() => deleteOrder(order.id)}>
+            Delete Order
+            </button>
 
           {order.items.map((item) => (
             <p key={item.id}>
               {item.name} x {item.quantity}
             </p>
-          ))}
+))}            
         </div>
       ))
-    )}
+   )}
 
       <h2>Total: {totalPrice} THB</h2>
 
