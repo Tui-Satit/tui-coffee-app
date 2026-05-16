@@ -295,8 +295,8 @@ function App() {
         
 
       <hr />
-
-      {menu.map((item) => (
+   <div className="menu-grid">
+       {menu.map((item) => (
         <MenuCard 
           key={item.id}
           id={item.id}
@@ -306,6 +306,8 @@ function App() {
           addToCart={addToCart}
         />
       ))}
+   </div>
+     
      </div>
    
   );
