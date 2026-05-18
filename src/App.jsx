@@ -5,6 +5,7 @@ import americano from "./assets/americano.jpg";
 import latte from "./assets/latte.jpg";
 import cappuccino from "./assets/cappuccino.jpg"; 
 import { useEffect, useState } from "react";
+import {BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,} from "recharts";
 
 
 function App() {
@@ -14,6 +15,9 @@ function App() {
    const [orders, setOrders] = useState([]);
    const [orderNumber, setOrderNumber] = useState(1);
    const [searchText, setSeachText] = useState("");
+   const [currentTime, setCurrentTime] = useState( new Date());
+   const [darkMode, setDarkMode] = useState(false);
+   const [selectedOrder, setSelectedOrder] = useState(null);
 
    useEffect(() => {
   const savedOrders = localStorage.getItem("orders");
@@ -39,6 +43,26 @@ function App() {
   useEffect(() => {
       localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    const saveOrderNumber = localStorage.getItem("orderNumber");
+
+    if(saveOrderNumber) {
+      setOrderNumber(JSON.parse(saveOrderNumber));
+    }
+  }, []);
+
+  useEffect (() => {
+    localStorage.setItem("orderNumber", JSON.stringify(orderNumber));
+  }, [orderNumber]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
 
   const menu = [
@@ -132,11 +156,18 @@ function App() {
     setOrders(updatedOrders);
 
   }
-  const submitOrder = () => {
+
+ const submitOrder = () => {
+    if (cart.length === 0) {
+      alert("Cart is empty");
+      return
+    }
+   
      if (customerName.trim() === "") {
       alert("Please enter customer name")
       return;
     }
+
     const newOrder = {
       id: Date.now(),
       customerName: customerName,
@@ -155,10 +186,6 @@ function App() {
 
     alert("Order submitted ☕");
 
-    if (cart.length === 0) {
-      alert("Cart is empty");
-      return;
-    }
   };
 
   const totalPrice = cart.reduce((sum, item) => {
@@ -190,21 +217,58 @@ function App() {
     );
   }, 0)
 
+  const chartData = [
+    {
+      name: "Orders",
+      value: totalOrders,
+    },
+
+    {
+      name: "Revenue",
+      value: totalRevenue,
+    },
+
+    {
+      name: "Cups",
+      value: totalCupsSold,
+    },
+  ]
+
   
 
   return (
-     <div>
-      <h1>Tui Cafe ☕</h1>
+    <div className={darkMode ? "dark app-wrapper" : "app-wrapper"}>
+     <div className="navbar">
+      <div className="logo">
+            <h1>Tui Cafe ☕</h1>
+      </div>
+      <div className="clock-box">
+        
+
+        <h2>
+          {currentTime.toLocaleDateString()}
+        </h2>
+
+      </div>
+    
+      <div className="nav-links">
+        <a href="#dashboard">Dashboard</a>
+        <a href="#menu">Menu</a>
+        <a href="#orders">Orders</a>
+        <button className="theme-btn" onClick={() => setDarkMode(!darkMode)}>{darkMode ? 
+         "☀️ Light" : "🌙 Dark" }</button>
+      </div>
+  </div>
 
     <div className="floating-cart">
        🛒 {totalItems}
-
+     
     </div>
    
 
    
 
-    <div className="customer-box">
+    <div className="cart-box">
         
        <input
           type="text"
@@ -215,10 +279,13 @@ function App() {
    
          <h3>Hello, {customerName}</h3>
     </div>
-    <div className="cart-box">
+    <div id="dashboard" className="cart-box">
 
-    <h2>Cart: {cart.length === 0 && (
-      <p>Your cart is empty ☕ </p>
+    <h2 className="section-title">Cart: {cart.length === 0 && (
+      <span className="cart-empty-text">
+           <p>Your cart is empty ☕ </p>
+      </span>
+     
     )}</h2>
 
     {cart.map((item, index) => (
@@ -247,6 +314,8 @@ function App() {
      
     ) )}
 
+    <h2>Total: {totalPrice} THB</h2>
+
     <input 
           type="text"
           placeholder="Search customer..."
@@ -254,25 +323,72 @@ function App() {
           onChange={(e) => setSeachText(e.target.value)}
     />
 
-    <div className="stats-box">
-        <h3>Total Orders: {totalOrders}</h3> 
-        <h3>Total Revenue: {totalRevenue}</h3>
-        <h3>Total Cups Sold: {totalCupsSold}</h3>
+    <div className="stats-grid">
+        <div className="stats-box">
+          <p>Total Orders</p>
+          <h2>{totalOrders}</h2>
+        </div>
+
+        <div className="stats-box">
+          <p>Total Revenue</p>
+          <h2>{totalRevenue}</h2>
+        </div>
+
+        <div className="stats-box">
+          <p>Cups Sold</p>
+          <h2>{totalCupsSold}</h2>
+        </div>
     </div>
 
-    <h2>Order History</h2>
+    <div className="chart-box">
+      <h2 className="section-title">
+           Cafe Analytics
+      </h2>
+
+      <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={chartData}>
+            <XAxis dataKey="name" />
+            <YAxis />
+          
+            <Bar dataKey="value" fill="#8b5e3c" radius={[14, 14, 0, 0]} />
+            <Tooltip contentStyle={{
+              borderRadius: "14px",
+              border: "none",
+              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.12)",
+            }}
+            />
+
+          </BarChart>
+      </ResponsiveContainer>
+
+    </div>
+    <div id="orders">
+        <h2 className="section-title"> Order History</h2>
+   
+   
 
     {orders.length === 0 ? (
-      <p>No orders yet </p>
+      <div className="empty-state">
+        <div className="empty-icon">☕</div>
+            <h3>No orders yet </h3>
+            <p>when customers submit orders, they will appear here.</p>
+      </div>
+      
     ) : (
         filteredOrders.map((order) => (
         <div key={order.id} className="order-card">
-          <h3>Order #{order.orderNumber}</h3>
+          <h3>Order #{String(order.orderNumber).padStart(3,"0")}</h3>
           <h3>Customer: {order.customerName}</h3>
           <p>Total: {order.total} Baht</p>
 
-          <button onClick={() => deleteOrder(order.id)}>
+          <button
+          className="delete-btn"
+          onClick={() => deleteOrder(order.id)}>
             Delete Order
+            </button>
+
+            <button className="action-btn" onClick={() => setSelectedOrder}>
+              View Receipt
             </button>
 
           {order.items.map((item) => (
@@ -284,18 +400,16 @@ function App() {
       ))
    )}
 
-      <h2>Total: {totalPrice} THB</h2>
+   </div>
 
-      <button onClick={clearCart}>  🗑  Clear Cart</button>
+      <button className="action-btn" onClick={clearCart}>  🗑  Clear Cart</button>
 
-      <button onClick={submitOrder}> Submit Order </button>
+      <button className="action-btn" onClick={submitOrder}> Submit Order </button>
   </div>
 
     
         
-
-      <hr />
-   <div className="menu-grid">
+   <div id="menu" className="menu-grid">
        {menu.map((item) => (
         <MenuCard 
           key={item.id}
@@ -307,6 +421,30 @@ function App() {
         />
       ))}
    </div>
+
+   {selectedOrder && (
+    <div className="modal-bg">
+      <div className="receipt-modal">
+        <h2>Tui Cafe  ☕</h2>
+        <h3>Receipt #{String(selectedOrder.orderNumber).padStart}(3, "0")</h3>
+
+        <p>Customer: {selectedOrder.customerName}</p>
+
+        {selectedOrder.item.map((item, index) =>  (
+          <p key={index}>
+              {item.name} x {item.quantity} - {item.price * item.quantity}  THB
+          </p>
+        ))}
+
+        <h3>Total: {selectedOrder.total}</h3>
+
+        <button className="action-btn" onClick={() => setSelectedOrder(null)}> 
+            /close
+        </button>
+
+      </div>
+   </div>
+   )}
      
      </div>
    
