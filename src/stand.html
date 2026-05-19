@@ -1,0 +1,44 @@
+  <div className="receipt-modal">
+
+         <h2>☕ Tui Cafe</h2>
+
+         <p className="receipt-date">
+             {selectedOrder.createdAt || "No date"}
+         </p>
+
+         <h3>
+           Receipt #{String(selectedOrder.orderNumber).padStart(3, "0")}
+         </h3>
+
+         <p>Customer: {selectedOrder.customerName}</p>
+
+         <div className="receipt-line"></div>
+
+         {selectedOrder.items.map((item, index) => (
+          <div key={index} className="receipt-row">
+            <span>{item.name} x {item.quantity}</span>
+            <span>{item.price * item.quantity}    THB</span>
+
+          </div>
+         ))}
+
+         <div className="receipt-line"></div>
+
+         <div className="receipt-total">
+          <span>Total</span>
+
+          <strong>{selectedOrder.total} THB</strong>
+         </div>
+
+         <button className="action-btn" onClick={() => setSelectedOrder(null)}>
+            Close
+         </button>
+      </div>
+
+    </div>
+  )}
+     
+     </div>
+   
+  );
+}

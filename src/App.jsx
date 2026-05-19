@@ -6,6 +6,7 @@ import latte from "./assets/latte.jpg";
 import cappuccino from "./assets/cappuccino.jpg"; 
 import { useEffect, useState } from "react";
 import {BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,} from "recharts";
+import toast, { Toaster } from "react-hot-toast";
 
 
 function App() {
@@ -174,6 +175,7 @@ function App() {
       items: cart,
       total: totalPrice,
       orderNumber: orderNumber,
+      createdAt: new Date().toLocaleString(),
     };
 
     setOrders([...orders, newOrder]);
@@ -184,7 +186,7 @@ function App() {
 
      setOrderNumber(orderNumber + 1);
 
-    alert("Order submitted ☕");
+    toast.success("Order submitted ☕");
 
   };
 
@@ -237,6 +239,8 @@ function App() {
   
 
   return (
+
+    
     <div className={darkMode ? "dark app-wrapper" : "app-wrapper"}>
      <div className="navbar">
       <div className="logo">
@@ -259,7 +263,7 @@ function App() {
          "☀️ Light" : "🌙 Dark" }</button>
       </div>
   </div>
-
+    <Toaster/>
     <div className="floating-cart">
        🛒 {totalItems}
      
@@ -387,7 +391,7 @@ function App() {
             Delete Order
             </button>
 
-            <button className="action-btn" onClick={() => setSelectedOrder}>
+            <button className="action-btn" onClick={() => setSelectedOrder(order)}>
               View Receipt
             </button>
 
@@ -422,33 +426,56 @@ function App() {
       ))}
    </div>
 
-   {selectedOrder && (
+  {selectedOrder && (
     <div className="modal-bg">
-      <div className="receipt-modal">
-        <h2>Tui Cafe  ☕</h2>
-        <h3>Receipt #{String(selectedOrder.orderNumber).padStart}(3, "0")</h3>
+    <div className="receipt-modal">
 
-        <p>Customer: {selectedOrder.customerName}</p>
+         <h2>☕ Tui Cafe</h2>
 
-        {selectedOrder.item.map((item, index) =>  (
-          <p key={index}>
-              {item.name} x {item.quantity} - {item.price * item.quantity}  THB
-          </p>
-        ))}
+         <p className="receipt-date">
+             {selectedOrder.createdAt || "No date"}
+         </p>
 
-        <h3>Total: {selectedOrder.total}</h3>
+         <h3>
+           Receipt #{String(selectedOrder.orderNumber).padStart(3, "0")}
+         </h3>
 
-        <button className="action-btn" onClick={() => setSelectedOrder(null)}> 
-            /close
-        </button>
+         <p>Customer: {selectedOrder.customerName}</p>
 
+         <div className="receipt-line"></div>
+
+         {selectedOrder.items.map((item, index) => (
+          <div key={index} className="receipt-row">
+            <span>{item.name} x {item.quantity}</span>
+            <span>{item.price * item.quantity}    THB</span>
+
+          </div>
+         ))}
+
+         <div className="receipt-line"></div>
+
+         <div className="receipt-total">
+          <span>Total</span>
+
+          <strong>{selectedOrder.total} THB</strong>
+         </div>
+
+         <button className="action-btn" onClick={() => setSelectedOrder(null)}>
+            Close
+         </button>
+
+         <button className="action-btn" onClick={() => window.print()}>
+          Print Receipt
+         </button>
       </div>
-   </div>
-   )}
-     
-     </div>
-   
-  );
+      </div>
+  )}
+  </div>
+ 
+  ); 
 }
+  
+
+    
 
 export default App;
