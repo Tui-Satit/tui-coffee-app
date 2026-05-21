@@ -9,13 +9,30 @@ body {
     #f8f5f1,
     #f2ebe3,
     #ede4da,
+    
   );
-
+  padding-bottom: 110px;
   min-height: 100vh;
   color: #2d221b;
 }
 
-.navbar {
+.header {
+  position: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header h1 {
+  font-size: clamp(32px, 5vw, 64px);
+}
+
+.header .header-date {
+  font-size: 20px !important;
+  line-height: 1;
+  margin: 0 20px;
+}
+
+.navbar { 
   position: sticky;
   top: 0;
   z-index: 999;
@@ -49,12 +66,16 @@ body {
   margin-right: 110px;
   font-size: 16px;
   color: #6f5c4f;
+  align-items: center;
 }
 
 .nav-links a {
   text-decoration: none;
   color: #6f5c4f;
   transition: 0.3s ease;
+  padding: 10px 18px;
+  border-radius: 999px;
+  white-space: nowrap;
 }
 
 .nav-links a:hover {
@@ -76,6 +97,7 @@ body {
   max-width: 1200px;
   margin: auto;
   padding: 40px 20px;
+  padding-top: 20px;
 }
 
 h1 {
@@ -268,6 +290,7 @@ button:hover {
   font-size: 18px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   z-index: 999;
+  text-decoration: none;
 }
 
 .customer-box {
@@ -302,6 +325,14 @@ button:hover {
 .active-sweet {
   background-color: #8b5cf6 !important;
   color: white !important;
+}
+
+.active-link {
+  background: #6f4e37;
+  color: white !important;
+  padding: 10px 18px;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(111, 78, 55, 0.25);
 }
 
 .order-card {
@@ -372,7 +403,7 @@ button:hover {
     #6f4e37,  
     #9c6b4a
   );
-  margin-top: 5px;
+  margin-top: 20px;
   color: white;
   border: none;
   padding: 14px 24px;
@@ -425,6 +456,10 @@ button:hover {
 
 .menu-grid {
   margin-top: 50px;
+}
+
+section {
+  scroll-margin-top: 120px;
 }
 
 .section-title {
@@ -539,8 +574,14 @@ button:hover {
   color: #2d221b;
 }
 
-.app-wrapper {
+.app-wrapper{
   min-height: 100vh;
+ 
+}
+
+.app-wrapper button{
+  margin-top: 20px;
+ 
 }
 
 .dark {
@@ -649,3 +690,131 @@ button:hover {
     box-shadow: none;
   }
 }
+
+.bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  width: min(92%, 520px);
+  height: 72px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(120, 80, 40, 0.12);
+  border-radius: 26px;
+  box-shadow: 0 18px 45px rgba(80, 50, 20, 0.18);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 999;
+}
+
+.bottom-nav a {
+  text-decoration: none;
+  color: #5a4030;
+  font-size: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: 0.2s ease;
+}
+
+.bottom-nav a span {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.bottom-nav a:hover {
+  transform: translateY(-4px);
+  color: #9a5a2f;
+}
+
+@media (min-width: 800px) {
+  .bottom-nav {
+    display: none;
+  }
+}
+
+.navbar .header-date {
+  font-size: 20px !important;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0 20px;
+}
+
+.order-status {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #fff3cd;
+  color: #7a5137;
+  font-weight: 700;
+}
+
+.pending {
+  background: #fff3cd;
+  color: #7a5137;
+}
+
+.preparing {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.done {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.sound-btn {
+  background: #8b5e3c;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.sound-btn:hover {
+  transform: translateY(-2px);
+}
+
+.active-sound {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow: 0 10px 24px rgba(34, 197, 94, 0.35);
+}
+
+.new-order-popup {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  width: 320px;
+  background: rgb(248, 245, 245);
+  color: #0e0500;
+  padding: 20px 24px;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0, 0.22);
+  z-index: 99999;
+  animation: popupIn 0.200s ease;
+  border-left: 0px solid #22c55e;
+}
+
+.new-order-popup h3 {
+  margin: 0 0 10px;
+}
+
+.new-order-popup p {
+  margin: 6px 0;
+  color: #6f5c4f;
+}
+
+@keyframes popupIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+
+  to{
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
