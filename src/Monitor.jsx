@@ -48,7 +48,7 @@ function Monitor() {
          }))
          .sort((a, b) => b.createdAt - a.createdAt);
 
-      if (soundReady && oldOrderCount.Count !== 0 && firebaseOrders.length > oldOrderCount.current) {
+      if (soundReady && oldOrderCount.current !== 0 && firebaseOrders.length > oldOrderCount.current) {
          setNewOrderAlert(firebaseOrders[0]);
 
         setTimeout(() => {
@@ -90,7 +90,7 @@ function Monitor() {
        <h1>☕ Tui Cafe Monitor</h1>
 
   <button 
-  className={soundReady ? "sound-btn active-sound" : "ound-btm"}
+  className={soundReady ? "sound-btn active-sound" : "sound-btn"}
       onClick={() => {
         if (audioRef && audioRef.current) {
           audioRef.current.pause();
