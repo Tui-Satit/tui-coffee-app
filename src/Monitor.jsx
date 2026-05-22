@@ -11,19 +11,21 @@ function Monitor() {
   const audioRef = useRef(null)
   const playAlert = async () => {
     try {
-      const audio = new Audio("/sounds/alarm.wav");
+      if (!audioRef.current) {
+         audioRef.current = new Audio("/sounds/alarm.wav");
 
-      audioRef.current = audio;
-      audio.loop = true;
-      audio.volume = 1;
-      audio.playsInline = true
-      audio.preload = "auto";
-
-      await audio.play();
+      audioRef.current.loop = true;
+      audioRef.current.volume = 1;
+      audioRef.current.playsInline = true
+      audioRef.current.preload = "auto";
+      }
+     
+      audioRef.current.currentTime = 0;
+      await audioRef.current.play();
 
       setTimeout(() => {
-        audio.pause();
-        audio.currentTime = 0;
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
       }, 90000 );
 
     } catch (error) {
@@ -116,12 +118,16 @@ function Monitor() {
       testAudio.playsInline = true;
 
       try {
+
         await testAudio.play();
+
+       audioRef.current = testAudio;
 
         setTimeout(() => {
           testAudio.pause();
           testAudio.currentTime = 0;
         }, 500);
+
       } catch (error) {
         console.log("Mobile sound blocked:", error);
       }
