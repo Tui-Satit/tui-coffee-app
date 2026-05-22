@@ -111,7 +111,7 @@ function Monitor() {
     if (!soundReady) {
       setSoundReady(true);
 
-      const testAudio = new Audio("/sounds/notification2.wav");
+      const testAudio = new Audio("/sounds/alarm.wav");
       testAudio.volume = 1;
       testAudio.playsInline = true;
 
