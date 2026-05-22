@@ -11,7 +11,7 @@ function Monitor() {
   const audioRef = useRef(null)
   const playAlert = async () => {
     try {
-      const audio = new Audio("/sounds/notification2.wav");
+      const audio = new Audio("/sounds/alarm.wav");
 
       audioRef.current = audio;
       audio.loop = true;
