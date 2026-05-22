@@ -12,7 +12,7 @@ function Monitor() {
   const playAlert = async () => {
     try {
       if (!audioRef.current) {
-         audioRef.current = new Audio("/sounds/alarm.wav");
+         audioRef.current = new Audio("/sounds/notification2.wav");
 
       audioRef.current.loop = true;
       audioRef.current.volume = 1;
@@ -113,7 +113,7 @@ function Monitor() {
     if (!soundReady) {
       setSoundReady(true);
 
-      const testAudio = new Audio("/sounds/alarm.wav");
+      const testAudio = new Audio("/sounds/notification2.wav");
       testAudio.volume = 1;
       testAudio.playsInline = true;
 
