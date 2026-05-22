@@ -17,39 +17,53 @@ function MenuCard(props) {
        <h2>{props.name}</h2>
 
        <button
-        className={drinkType === "Hot" ? "active-hot" : ""} 
+        className={`option-btn type-btn ${
+          drinkType === "Hot" ? "active-hot" : ""
+        }`} 
+
         onClick={() => setDrinkType("Hot")}> ☕ Hot</button>
 
         <button
-         className={drinkType === "Cold" ? "active-cold" : ""}
+         className={`option-btn type-btn ${
+          drinkType === "Cold" ? "active-cold" : ""
+         }`}
          onClick={() => setDrinkType("Cold")}> 🧊 Cold</button>
 
-         <div className="sweetness-options">  
+        
           <button
-          className={sweetness === "Normal" ? "active-sweet" : ""}
+          className={`option-btn sweet-btn ${
+            sweetness === "Normal" ? "active-sweet" : ""
+          }`}
+
           onClick={() => setSweetness("Normal")}>
             Normal
           </button>   
 
            <button
-            className={sweetness === "Less Sweet" ? "active-sweet" : ""}
+            className={`option-btn sweet-btn ${
+              sweetness === "Less Sweet" ? "active-sweet" : ""
+            }`}
             onClick={() => setSweetness("Less Sweet")}>
             Less Sweet
           </button>
 
            <button
-            className={sweetness === "No Sugar" ? "active-sweet" : ""}
+            className={`option-btn sweet-btn ${
+              sweetness === "No Sugar" ? "active-sweet" : ""
+            }`}
             onClick={() => setSweetness("No Sugar")}>
             No Sugar
           </button>
- </div>
+ 
 
         <p>Selected: {drinkType}</p>
         <p>Sweetness: {sweetness}</p>
 
        <p>{props.price} THB</p>
 
-       <button onClick={() =>
+       <button
+       className="add-cart-btn" 
+       onClick={() =>
         props.addToCart ({
           id: props.id,
           name: props.name,

@@ -211,8 +211,18 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background: #5a3f2c;
+.option-btn {
+  transition: all 0.2s ease;
+}
+
+.option-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0, 0.12);
+ 
+}
+
+.option-btn:active{
+  transform: scale(0.97);
 }
 
 .card {
@@ -245,7 +255,7 @@ button:hover {
 }
 
 .cart-box button {
-  background: #7a5137;
+  background: #75482b;
   color: white;
   border-radius: 16px;
   margin-top: 10px;
@@ -256,7 +266,7 @@ button:hover {
 }
 
 .cart-box button:hover {
-  background: #5f3d29;
+ 
   transform: translateY(-2px);
 }
 
@@ -816,5 +826,37 @@ section {
     transform: translateX(0);
     opacity: 1;
   }
+}
+
+.type-btn {
+  background: #7b553c;
+  color: white;
+}
+
+.sweet-btn {
+  background: #8b5cf6;
+  color: white;
+}
+
+.add-cart-btn {
+  background: linear-gradient(
+    135deg,
+    #111827,
+    #1f2937
+  );
+  color: white;
+  font-weight: bold;
+}
+
+.active-hot {
+  background: #ff914d;
+}
+
+.active-cold {
+  background: #4da6ff;
+}
+
+.active-sweet {
+  background: #a855f7;
 }
 
