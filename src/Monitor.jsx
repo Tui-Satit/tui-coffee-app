@@ -104,14 +104,27 @@ function Monitor() {
   <button 
   className={soundReady ? "sound-btn active-sound" : "sound-btn"}
       onClick={() => {
-        if (audioRef && audioRef.current) {
+        if (audioRef.current) {
           audioRef.current.pause();
           audioRef.current.currentTime = 0;
+    }
+    if (!soundReady) {
+      setSoundReady(true);
 
-        }
+      try {
+        await testAudio.play();
 
-        setSoundReady(!soundReady);
-      }}
+        setTimeout(() => {
+          testAudio.pause();
+          test.Audio.currentTime = 0;
+        }, 500);
+      } catch (error) {
+        console.log("Mobile sound blocked:", error);
+      }
+    } else {
+       setSoundReady(false);
+    }
+}}
   >
     {soundReady ? "🔊Sound ON" : "🔔 Enable Sound"}
   </button>
