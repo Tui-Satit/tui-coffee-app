@@ -222,6 +222,30 @@ function App() {
 
   }
 
+const sendToLine = () => {
+  const message = ` 
+    ☕ New Order
+    👤 Name: ${customerName}
+
+    ${cart
+      .map(
+        (item) =>
+          `${item.name} (${item.type})
+        Sweet: ${item.sweetness}
+        Qty: ${item.quantity}`
+      )
+      .join("\n")}
+
+      💰 Total: ${totalPrice} บาท
+`;
+
+    const encodedMessage = encodeURIComponent(message);
+
+    window.open(
+    `https://line.me/R/oaMessage/@947ozwwk/?${encodedMessage}`, "_blank"
+    );
+};
+
  const submitOrder = () => {
     if (cart.length === 0) {
       alert("Cart is empty");
@@ -260,6 +284,8 @@ function App() {
     setCustomerName("");
 
     toast.success("Order submitted ☕");
+
+    sendToLine();
 
   };
 
