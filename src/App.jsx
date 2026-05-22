@@ -414,13 +414,7 @@ const sendToLine = () => {
 
     <h2>Total: {totalPrice} THB</h2>
 
-    <input 
-          type="text"
-          placeholder="Search customer..."
-          value={searchText}
-          onChange={(e) => setSeachText(e.target.value)}
-    />
-    
+   
    
    
 
@@ -454,7 +448,7 @@ const sendToLine = () => {
         />
       ))}
    </div>
-            // Move
+            
       <div id="cart" className="cart-box">
     <div id="orders">
         <h2 className="section-title"> Order History</h2>
@@ -512,9 +506,17 @@ const sendToLine = () => {
 </div>
               
 
-          // Move here
+          
    <div id="cart" className="cart-box">
+     <input 
+          type="text"
+          placeholder="Search customer..."
+          value={searchText}
+          onChange={(e) => setSeachText(e.target.value)}
+    />
     <div className="stats-grid">
+      
+    
         <div className="stats-box">
           <p>Total Orders</p>
           <h2>{totalOrders}</h2>
@@ -554,7 +556,7 @@ const sendToLine = () => {
 
     </div>
 
-            // To here
+          
   {selectedOrder && (
     <div className="modal-bg">
     <div className="receipt-modal">
