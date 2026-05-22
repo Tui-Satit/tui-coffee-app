@@ -103,13 +103,17 @@ function Monitor() {
 
   <button 
   className={soundReady ? "sound-btn active-sound" : "sound-btn"}
-      onClick={() => {
+      onClick={async () => {
         if (audioRef.current) {
           audioRef.current.pause();
           audioRef.current.currentTime = 0;
     }
     if (!soundReady) {
       setSoundReady(true);
+
+      const testAudio = new Audio("/sounds/notification2.wav");
+      testAudio.volumme = 1;
+      testAudio.playsInline = true;
 
       try {
         await testAudio.play();
