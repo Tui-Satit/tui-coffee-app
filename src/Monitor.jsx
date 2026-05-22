@@ -4,12 +4,33 @@ import { db } from "./firebase";
 import "./App.css";
 
 function Monitor() {
-  
   const [orders, setOrders] = useState([]);
   const [soundReady, setSoundReady] = useState(false)
   const [newOrderAlert, setNewOrderAlert] = useState(null);
   const oldOrderCount = useRef(0);
   const audioRef = useRef(null)
+  const playAlert = async () => {
+    try {
+      const audio = new Audio("/sounds/notification2.wav");
+
+      audioRef.current = audio;
+      audio.loop = true;
+      audio.volume = 1;
+      audio.playsInline = true
+      audio.preload = "auto";
+
+      await audio.play();
+
+      setTimeout(() => {
+        audio.pause();
+        audio.currentTime = 0;
+      }, 90000 );
+
+    } catch (error) {
+      console.log("Sound blocked:", error);
+    }
+  };
+
   const updateStatus = async (id, currentStatus) => {
     let newStatus = "Pending";
 
@@ -55,16 +76,7 @@ function Monitor() {
           setNewOrderAlert(null);
         }, 6000);
 
-        const audio = new Audio("/sounds/notification2.wav");
-        audioRef.current = audio;
-        audio.loop = true;
-        audio.volume = 1;
-        audio.play();
-
-        setTimeout(() => {
-          audio.pause();
-          audio.currentTime = 0;
-        }, 90000);
+        playAlert();
      }
          
         oldOrderCount.current = firebaseOrders.length;
