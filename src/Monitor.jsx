@@ -112,7 +112,7 @@ function Monitor() {
       setSoundReady(true);
 
       const testAudio = new Audio("/sounds/notification2.wav");
-      testAudio.volumme = 1;
+      testAudio.volume = 1;
       testAudio.playsInline = true;
 
       try {
@@ -120,7 +120,7 @@ function Monitor() {
 
         setTimeout(() => {
           testAudio.pause();
-          test.Audio.currentTime = 0;
+          testAudio.currentTime = 0;
         }, 500);
       } catch (error) {
         console.log("Mobile sound blocked:", error);
