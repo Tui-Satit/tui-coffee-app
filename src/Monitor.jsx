@@ -9,6 +9,9 @@ function Monitor() {
   const [newOrderAlert, setNewOrderAlert] = useState(null);
   const oldOrderCount = useRef(0);
   const audioRef = useRef(null)
+  const audioContextRef = useRef(null);
+  const sourceRef = useRef(null);
+  const gainRef = useRef(null); 
   const enableSound = async () => {
     setSoundReady(true);
 
@@ -39,18 +42,35 @@ function Monitor() {
         audioRef.current.preload = "auto";
       }
 
-      audioRef.current.currentTime = 0;
-      await audioRef.current.play();
+  if (!audioContextRef.current) {
+  const AudioContextClass = 
+    window.AudioContext || window.webkitAudioContext; 
 
-      setTimeout(() => {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }, 90000);
-    } catch (error) {
-      console.log("Sound blocked:", error);
-    }
+    audioContextRef.current = new AudioContextClass();
+    sourceRef.current = audioContextRef.current.createMediaElementSource(audioRef.current);
+    gainRef.current = audioContextRef.current.createGain();
 
-  };
+    gainRef.current.gain.value = 2.5;
+
+    sourceRef.current
+       .connect(gainRef.current)
+       .connect(audioContextRef.current.destination);
+  }
+
+  await audioContextRef.current.resume();
+
+  audioRef.current.currentTime = 0;
+  await audioRef.current.play();
+
+  setTimeout(() => {
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+ }, 90000);
+} catch (error) {
+  console.log("Sound blocked:",error);
+}
+};
+
  
 
   useEffect(() => {
