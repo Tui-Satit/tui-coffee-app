@@ -9,32 +9,48 @@ function Monitor() {
   const [newOrderAlert, setNewOrderAlert] = useState(null);
   const oldOrderCount = useRef(0);
   const audioRef = useRef(null)
+  const enableSound = async () => {
+    setSoundReady(true);
+
+    if (!audioRef.current) {
+      audioRef.current = new Audio("/sounds/notification2.wav");
+      audioRef.current.loop = true;
+      audioRef.current.volume = 1;
+      audioRef.current.playsInline = true;
+      audioRef.current.preload = "auto";
+    }
+
+    try {
+      await audioRef.current.play();
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    } catch (error) {
+      console.log("Enable sound failed", error);
+    }
+  };
+
   const playAlert = async () => {
     try {
       if (!audioRef.current) {
-         audioRef.current = new Audio("/sounds/notification.wav");
-
-      audioRef.current.loop = true;
-      audioRef.current.volume = 1.0;
-      audioRef.current.playsInline = true;
-      audioRef.current.preload = "auto";
+        audioRef.current = new Audio("/sounds/notification2.wav");
+        audioRef.current.loop = true;
+        audioRef.current.volume = 1;
+        audioRef.current.playsInline = true;
+        audioRef.current.preload = "auto";
       }
-      
-      
-      audioRef.current.currentTime = 0;
 
+      audioRef.current.currentTime = 0;
       await audioRef.current.play();
 
       setTimeout(() => {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
-      }, 90000 );
-
+      }, 90000);
     } catch (error) {
       console.log("Sound blocked:", error);
     }
-  };
 
+  };
  
 
   useEffect(() => {
@@ -92,7 +108,7 @@ function Monitor() {
 
   <button
     className="sound-btn"
-    onClick={() => setSoundReady(true)}
+    onClick={enableSound}
   >
      {soundReady ? "✅ Sound Ready" : "🔊 Open Sound"}  
   </button>
