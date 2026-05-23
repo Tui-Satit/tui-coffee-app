@@ -71,6 +71,15 @@ function Monitor() {
 }
 };
 
+const stopSound = () => {
+  setSoundReady(false);
+
+  if (audioRef.current) {
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+  }
+};
+
  
 
   useEffect(() => {
@@ -128,9 +137,9 @@ function Monitor() {
 
   <button
     className="sound-btn"
-    onClick={enableSound}
+    onClick={soundReady ? stopSound : enableSound}
   >
-     {soundReady ? "✅ Sound Ready" : "🔊 Open Sound"}  
+     {soundReady ? "🔇 Close Sound" : "🔊 Open Sound"}  
   </button>
 
       <h2>Active Orders</h2>
