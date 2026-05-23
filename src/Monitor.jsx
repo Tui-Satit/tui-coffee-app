@@ -9,9 +9,7 @@ function Monitor() {
   const [newOrderAlert, setNewOrderAlert] = useState(null);
   const oldOrderCount = useRef(0);
   const audioRef = useRef(null)
-  const audioContextRef = useRef(null);
-  const sourceRef = useRef(null);
-  const gainRef = useRef(null); 
+  
   const enableSound = async () => {
     setSoundReady(true);
 
@@ -25,52 +23,38 @@ function Monitor() {
 
     try {
       await audioRef.current.play();
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+
+      setTimeout(() => {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }, 1000);
+     
     } catch (error) {
       console.log("Enable sound failed", error);
     }
   };
 
   const playAlert = async () => {
-    try {
-      if (!audioRef.current) {
-        audioRef.current = new Audio("/sounds/notification2.wav");
-        audioRef.current.loop = true;
-        audioRef.current.volume = 1;
-        audioRef.current.playsInline = true;
-        audioRef.current.preload = "auto";
-      }
+  try {
+    if (!audioRef.current) {
+      audioRef.current = new Audio("/sounds/notification2.wav");
+      audioRef.current.loop = true;
+      audioRef.current.volume = 1;
+      audioRef.current.playsInline = true;
+      audioRef.current.preload = "auto";
+    }
 
-  if (!audioContextRef.current) {
-  const AudioContextClass = 
-    window.AudioContext || window.webkitAudioContext; 
-
-    audioContextRef.current = new AudioContextClass();
-    sourceRef.current = audioContextRef.current.createMediaElementSource(audioRef.current);
-    gainRef.current = audioContextRef.current.createGain();
-
-    gainRef.current.gain.value = 2.5;
-
-    sourceRef.current
-       .connect(gainRef.current)
-       .connect(audioContextRef.current.destination);
-  }
-
-  await audioContextRef.current.resume();
-
-  audioRef.current.currentTime = 0;
-  await audioRef.current.play();
-
-  setTimeout(() => {
-    audioRef.current.pause();
     audioRef.current.currentTime = 0;
- }, 90000);
-} catch (error) {
-  console.log("Sound blocked:",error);
-}
-};
+    await audioRef.current.play();
 
+    setTimeout(() => {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }, 90000);
+  } catch (error) {
+    console.log("Sound blocked:", error);
+  }
+};
 const stopSound = () => {
   setSoundReady(false);
 
