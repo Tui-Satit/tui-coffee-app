@@ -40,21 +40,22 @@ function Monitor() {
   };
 
   const playAlert = async () => {
-    if (!audioRef.current) return;
+  if (!audioRef.current) return;
 
-    try {
-      audioRef.current.volume = 1;
+  try {
+    audioRef.current.volume = 1;
+    audioRef.current.currentTime = 0;
+
+    await audioRef.current.play();
+
+    setTimeout(() => {
+      audioRef.current.pause();
       audioRef.current.currentTime = 0;
-      await audioRef.current.play();
-
-      setTimeout(() => {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }, 90000);
-    } catch (error) {
-      console.log("Sound blocked:", error);
-    }
-  };
+    }, 90000);
+  } catch (error) {
+    console.log("Sound blocked:", error);
+  }
+};
 
   const stopSound = () => {
     setSoundReady(false);
