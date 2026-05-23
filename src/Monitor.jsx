@@ -5,92 +5,100 @@ import "./App.css";
 
 function Monitor() {
   const [orders, setOrders] = useState([]);
-  const [soundReady, setSoundReady] = useState(false)
+  const [soundReady, setSoundReady] = useState(false);
   const [newOrderAlert, setNewOrderAlert] = useState(null);
-  const oldOrderCount = useRef(0);
-  const audioRef = useRef(null)
-  
-  const enableSound = async () => {
-    setSoundReady(true);
 
-    if (!audioRef.current) {
-      audioRef.current = new Audio("/sounds/notification2.wav");
-      audioRef.current.loop = true;
-      audioRef.current.volume = 1;
-      audioRef.current.playsInline = true;
-      audioRef.current.preload = "auto";
+  const oldOrderCount = useRef(0);
+  const audioRef = useRef(null);
+
+  const enableSound = async () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
     }
 
+    const audio = new Audio("/sounds/alarm.wav");
+    audio.loop = true;
+    audio.volume = 1;
+    audio.playsInline = true;
+    audio.preload = "auto";
+
+    audioRef.current = audio;
+    setSoundReady(true);
+
     try {
+      audioRef.current.currentTime = 0;
       await audioRef.current.play();
 
       setTimeout(() => {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
-      }, 1000);
-     
+      }, 300);
     } catch (error) {
-      console.log("Enable sound failed", error);
+      console.log("Enable sound failed:", error);
     }
   };
 
   const playAlert = async () => {
-  try {
-    if (!audioRef.current) {
-      audioRef.current = new Audio("/sounds/notification2.wav");
-      audioRef.current.loop = true;
+    if (!audioRef.current) return;
+
+    try {
       audioRef.current.volume = 1;
-      audioRef.current.playsInline = true;
-      audioRef.current.preload = "auto";
+      audioRef.current.currentTime = 0;
+      await audioRef.current.play();
+
+      setTimeout(() => {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }, 90000);
+    } catch (error) {
+      console.log("Sound blocked:", error);
     }
+  };
 
-    audioRef.current.currentTime = 0;
-    await audioRef.current.play();
+  const stopSound = () => {
+    setSoundReady(false);
 
-    setTimeout(() => {
+    if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
-    }, 90000);
-  } catch (error) {
-    console.log("Sound blocked:", error);
-  }
-};
-const stopSound = () => {
-  setSoundReady(false);
-
-  if (audioRef.current) {
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
-  }
-};
-
- 
+    }
+  };
 
   useEffect(() => {
     const ordersRef = ref(db, "orders");
 
-    onValue(ordersRef, (snapshot) => {
+    const unsubscribe = onValue(ordersRef, (snapshot) => {
       const data = snapshot.val();
 
       if (data) {
         const firebaseOrders = Object.entries(data)
-         .map(([id, order]) => ({
-          id,
-          ...order,
-          items: order.cart || [],
-         }))
-         .sort((a, b) => b.createdAt - a.createdAt);
+          .map(([id, order]) => ({
+            id,
+            ...order,
+            items: order.cart || [],
+          }))
+          .sort((a, b) => b.createdAt - a.createdAt);
 
-         setOrders(firebaseOrders);
+        setOrders(firebaseOrders);
 
-         if (soundReady && firebaseOrders.length > oldOrderCount.current) {
+        if (
+          soundReady &&
+          oldOrderCount.current !== 0 &&
+          firebaseOrders.length > oldOrderCount.current
+        ) {
           playAlert();
-          setNewOrderAlert("New order coming!");
-         }
+          setNewOrderAlert("🚨 New order coming!");
+        }
 
-         oldOrderCount.current = firebaseOrders.length;
-      } 
+        oldOrderCount.current = firebaseOrders.length;
+      } else {
+        setOrders([]);
+        oldOrderCount.current = 0;
+      }
     });
+
+    return () => unsubscribe();
   }, [soundReady]);
 
   const updateStatus = async (id, currentStatus) => {
@@ -119,12 +127,18 @@ const stopSound = () => {
     <div className="monitor-page">
       <h1>☕ Tui Cafe Monitor</h1>
 
-  <button
-    className="sound-btn"
-    onClick={soundReady ? stopSound : enableSound}
-  >
-     {soundReady ? "🔇 Close Sound" : "🔊 Open Sound"}  
-  </button>
+      <button
+        className="sound-btn"
+        onClick={soundReady ? stopSound : enableSound}
+      >
+        {soundReady ? "🔇 Close Sound" : "🔊 Open Sound"}
+      </button>
+
+      {newOrderAlert && (
+        <div className="new-order-alert">
+          {newOrderAlert}
+        </div>
+      )}
 
       <h2>Active Orders</h2>
 
@@ -139,50 +153,46 @@ const stopSound = () => {
 
             {order.items.map((item, index) => (
               <p key={index}>
-                  {item.quantity}x {item.name}
+                {item.quantity}x {item.name}
               </p>
             ))}
 
-             <p>Status: {order.status || "Pending"}</p>
+            <p>Status: {order.status || "Pending"}</p>
 
-             <button
+            <button
               onClick={() =>
-                 updateStatus(order.id, order.status || "Pending")
+                updateStatus(order.id, order.status || "Pending")
               }
-              >
-                Next Step
-             </button>
+            >
+              Next Step
+            </button>
           </div>
-        )) }
-     </div>
+        ))}
+      </div>
 
-       <h2 className="history-title">📜 Order History</h2>
+      <h2 className="history-title">📜 Order History</h2>
 
-       <div className="history-grid">
+      <div className="history-grid">
         {historyOrders.map((order) => (
           <div className="history-card" key={order.id}>
             <h3>#{order.orderNumber}</h3>
 
-          <p>
-            <strong>{order.customerName}</strong>
-          </p>
-
-          {order.items.map((item, index) => (
-            <p key={index}>
-                {item.quantity}x {item.name}
+            <p>
+              <strong>{order.customerName}</strong>
             </p>
-          ))}
 
-          <p className="completed-text">
-               ✅ Completed
-          </p>
-        </div>
-      ))}
-   </div>
+            {order.items.map((item, index) => (
+              <p key={index}>
+                {item.quantity}x {item.name}
+              </p>
+            ))}
+
+            <p className="completed-text">✅ Completed</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
-
-  
 
 export default Monitor;
