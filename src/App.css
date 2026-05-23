@@ -860,3 +860,24 @@ section {
   background: #a855f7;
 }
 
+.history-title {
+  margin-top: 50px;
+}
+
+.history-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.history-card {
+  background: #f1f1f1;
+  padding: 20px;
+  border-radius: 16px;
+  opacity: 0.9;
+}
+
+.completed-text {
+  color: green;
+  font-weight: bold;
+}
+

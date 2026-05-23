@@ -12,15 +12,17 @@ function Monitor() {
   const playAlert = async () => {
     try {
       if (!audioRef.current) {
-         audioRef.current = new Audio("/sounds/notification2.wav");
+         audioRef.current = new Audio("/sounds/notification.wav");
 
       audioRef.current.loop = true;
-      audioRef.current.volume = 1;
-      audioRef.current.playsInline = true
+      audioRef.current.volume = 1.0;
+      audioRef.current.playsInline = true;
       audioRef.current.preload = "auto";
       }
-     
+      
+      
       audioRef.current.currentTime = 0;
+
       await audioRef.current.play();
 
       setTimeout(() => {
@@ -33,33 +35,12 @@ function Monitor() {
     }
   };
 
-  const updateStatus = async (id, currentStatus) => {
-    let newStatus = "Pending";
-
-    if (currentStatus === "Pending") {
-      newStatus = "Preparing";
-
-   } else if (currentStatus === "Preparing") {
-     newStatus = "Done";
-   } else if (currentStatus === "Preparing") {
-    newStatus = "Pending";
-   }
-
-   try {
-      await update(ref(db,`orders/${id}`), {
-     status : newStatus,
-   });
-
-     console.log("Status Updeted:", newStatus);
-   } catch (error) {
-    console.error(error);
-   }
-};
+ 
 
   useEffect(() => {
     const ordersRef = ref(db, "orders");
 
-    const unsubscribe = onValue(ordersRef, (snapshot) => {
+    onValue(ordersRef, (snapshot) => {
       const data = snapshot.val();
 
       if (data) {
@@ -71,97 +52,108 @@ function Monitor() {
          }))
          .sort((a, b) => b.createdAt - a.createdAt);
 
-      if (soundReady && oldOrderCount.current !== 0 && firebaseOrders.length > oldOrderCount.current) {
-         setNewOrderAlert(firebaseOrders[0]);
-
-        setTimeout(() => {
-          setNewOrderAlert(null);
-        }, 6000);
-
-        playAlert();
-     }
-         
-        oldOrderCount.current = firebaseOrders.length;
          setOrders(firebaseOrders);
-      } else {
-        setOrders([]);
-      }
-    });
 
-    return () => unsubscribe();
+         if (soundReady && firebaseOrders.length > oldOrderCount.current) {
+          playAlert();
+          setNewOrderAlert("New order coming!");
+         }
+
+         oldOrderCount.current = firebaseOrders.length;
+      } 
+    });
   }, [soundReady]);
 
+  const updateStatus = async (id, currentStatus) => {
+    let newStatus = "Pending";
+
+    if (currentStatus === "Pending") {
+      newStatus = "Preparing";
+    } else if (currentStatus === "Preparing") {
+      newStatus = "Completed";
+    }
+
+    await update(ref(db, `orders/${id}`), {
+      status: newStatus,
+    });
+  };
+
+  const activeOrders = orders.filter(
+    (order) => order.status !== "Completed"
+  );
+
+  const historyOrders = orders.filter(
+    (order) => order.status === "Completed"
+  );
+
   return (
-    <div className="app-wrapper">
+    <div className="monitor-page">
+      <h1>☕ Tui Cafe Monitor</h1>
 
-      {newOrderAlert && (
-        <div className="new-order-popup">
-          <h3>🔔New Order!</h3>
-          <p>Cusomer: {newOrderAlert.customerName}</p>
-          <p>Total: {newOrderAlert.total}     THB</p>
-        </div>
-      )}
-       <h1>☕ Tui Cafe Monitor</h1>
-
-  <button 
-  className={soundReady ? "sound-btn active-sound" : "sound-btn"}
-      onClick={async () => {
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.currentTime = 0;
-    }
-    if (!soundReady) {
-      setSoundReady(true);
-
-      const testAudio = new Audio("/sounds/notification2.wav");
-      testAudio.volume = 1;
-      testAudio.playsInline = true;
-
-      try {
-
-        await testAudio.play();
-
-       audioRef.current = testAudio;
-
-        setTimeout(() => {
-          testAudio.pause();
-          testAudio.currentTime = 0;
-        }, 500);
-
-      } catch (error) {
-        console.log("Mobile sound blocked:", error);
-      }
-    } else {
-       setSoundReady(false);
-    }
-}}
+  <button
+    className="sound-btn"
+    onClick={() => setSoundReady(true)}
   >
-    {soundReady ? "🔊Sound ON" : "🔔 Enable Sound"}
+     {soundReady ? "✅ Sound Ready" : "🔊 Open Sound"}  
   </button>
 
-  
+      <h2>Active Orders</h2>
 
-       {orders.length === 0 ? (
-         <h2>No orders yet</h2>
-       ) : (
-        orders.map((order) => (
-          <div key={order.id} className="order-card">
-            <h2>Order #{order.orderNumber ? String(order.orderNumber).padStart(3, "0") : "No Number"}</h2>
-            <h3>Customer: {order.customerName}</h3>
-            <p>Total: {order.total} THB</p>
+      <div className="orders-grid">
+        {activeOrders.map((order) => (
+          <div className="order-card" key={order.id}>
+            <h3>#{order.orderNumber}</h3>
+
+            <p>
+              <strong>{order.customerName}</strong>
+            </p>
 
             {order.items.map((item, index) => (
               <p key={index}>
-                  {item.name} x {item.quantity} - {item.type} / {item.sweetness}
+                  {item.quantity}x {item.name}
               </p>
             ))}
 
-          
+             <p>Status: {order.status || "Pending"}</p>
+
+             <button
+              onClick={() =>
+                 updateStatus(order.id, order.status || "Pending")
+              }
+              >
+                Next Step
+             </button>
           </div>
-        ))
-       )}
+        )) }
+     </div>
+
+       <h2 className="history-title">📜 Order History</h2>
+
+       <div className="history-grid">
+        {historyOrders.map((order) => (
+          <div className="history-card" key={order.id}>
+            <h3>#{order.orderNumber}</h3>
+
+          <p>
+            <strong>{order.customerName}</strong>
+          </p>
+
+          {order.items.map((item, index) => (
+            <p key={index}>
+                {item.quantity}x {item.name}
+            </p>
+          ))}
+
+          <p className="completed-text">
+               ✅ Completed
+          </p>
+        </div>
+      ))}
+   </div>
     </div>
   );
 }
+
+  
 
 export default Monitor;
