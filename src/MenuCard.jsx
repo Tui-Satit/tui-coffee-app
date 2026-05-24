@@ -16,21 +16,28 @@ function MenuCard(props) {
 
        <h2>{props.name}</h2>
 
-       <button
-        className={`option-btn type-btn ${
-          drinkType === "Hot" ? "active-hot" : ""
-        }`} 
+       <div className="type-group">
+         <button 
+           className={`option-btn type-btn ${
+             drinkType === "Hot" ? "active-hot" : ""
+            }`}
+            onClick={() => setDrinkType("Hot")}
+         >
+            ☕ Hot
+         </button>
 
-        onClick={() => setDrinkType("Hot")}> ☕ Hot</button>
+         <button 
+           className={`option-btn type-btn ${
+             drinkType === "Cold" ? "active-cold" : ""
+            }`}
+             onClick={() => setDrinkType("Cold")}
+         >
+           🧊 Cold
+         </button>
+       </div>
 
-        <button
-         className={`option-btn type-btn ${
-          drinkType === "Cold" ? "active-cold" : ""
-         }`}
-         onClick={() => setDrinkType("Cold")}> 🧊 Cold</button>
-
-        
-          <button
+        <div className="sweetness-group">
+           <button
           className={`option-btn sweet-btn ${
             sweetness === "Normal" ? "active-sweet" : ""
           }`}
@@ -54,6 +61,9 @@ function MenuCard(props) {
             onClick={() => setSweetness("No Sugar")}>
             No Sugar
           </button>
+        </div>
+
+          
  
 
         <p>Selected: {drinkType}</p>

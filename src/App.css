@@ -291,7 +291,7 @@ button {
 
 .floating-cart {
   position: fixed;
-  top: 30px;
+  top: 50px;
   right: 80px;
   background: black;
   color: white;
@@ -881,3 +881,44 @@ section {
   font-weight: bold;
 }
 
+.type-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.type-btn {
+  flex: 1;
+}
+
+.active-hot {
+  background: orangered;
+  color: white;
+  border: none;
+}
+
+.active-cold {
+  background: #4da3ff;
+  color: white;
+  border: none;
+}
+
+.option-btn {
+  transition: 0.5;
+}
+
+.sweetness-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.sweet-btn {
+  flex: 1;
+}
+
+.active-sweet {
+  background: green;
+  color: white;
+  border: none;
+}
