@@ -892,13 +892,13 @@ section {
 }
 
 .active-hot {
-  background: orangered;
+  background: #22c55e;
   color: white;
   border: none;
 }
 
 .active-cold {
-  background: #4da3ff;
+  background: #22c55e;
   color: white;
   border: none;
 }
@@ -918,7 +918,7 @@ section {
 }
 
 .active-sweet {
-  background: green;
+  background: #22c55e !important;
   color: white;
   border: none;
 }
