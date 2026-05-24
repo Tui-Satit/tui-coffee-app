@@ -506,7 +506,7 @@ section {
 
   .floating-cart {
     top: 18px;
-    right: 81px;
+    right: 50px;
     font-size: 15px;
     padding: 10px 14px;
   }
@@ -523,6 +523,12 @@ section {
 
   .section-title {
     font-size: 32px;
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
   }
 }
 
