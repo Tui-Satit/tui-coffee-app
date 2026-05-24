@@ -191,6 +191,12 @@ input {
 }
 
 @media (max-width: 600px) {
+  .app {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px 10px;
+  padding-top: 10px;
+}
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -199,6 +205,8 @@ input {
     width: 100%;
     margin: auto;
   }
+
+
 }
 
 .menu-card-content {
