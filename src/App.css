@@ -191,13 +191,7 @@ input {
 }
 
 @media (max-width: 450px) {
-  .container {
-  max-width: 100%;
-  margin: auto;
-  padding: 20px 10px;
-  padding-top: 10px;
-  background-color: grey;
-}
+ 
 
 body {
   overflow: hidden;
