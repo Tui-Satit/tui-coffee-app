@@ -194,6 +194,11 @@ input {
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .navbar {
+    width: 100%;
+    margin: auto;
+  }
 }
 
 .menu-card-content {
