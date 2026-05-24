@@ -343,27 +343,11 @@ const sendToLine = () => {
     <div className={darkMode ? "dark app-wrapper" : "app-wrapper"}>
      <div className="navbar">
       <div className="logo">
-            <h1>Tui Cafe ☕</h1>
-      </div>
-      <div className="clock-box">
-        
-
-        <h2 className="header-date">
-          {currentTime.toLocaleDateString()}
-        </h2>
-
+            <h1>☕Tui Cafe </h1>
       </div>
     
-      <div className="nav-links">
-        <a href="#dashboard" className={activeSection === "dashboard" ? "active-link" : ""}>Dashboard</a>
-
-        <a href="#menu" className={activeSection === "menu" ? "active-link" : ""}>Menu</a>
-
-        <a href="#orders" className={activeSection === "orders" ? "active-link" : ""}>Orders</a>
-
-        <button className="theme-btn" onClick={() => setDarkMode(!darkMode)}>{darkMode ? 
-         "☀️ Light" : "🌙 Dark" }</button>
-      </div>
+    
+      
   </div>
     <Toaster/>
     <a href="#cart" className="floating-cart">
@@ -377,7 +361,23 @@ const sendToLine = () => {
     
 
 
-    <div id="dashboard" className="cart-box">
+  
+    
+        
+   <div id="menu" className="menu-grid">
+       {menu.map((item) => (
+        <MenuCard 
+          key={item.id}
+          id={item.id}
+          name={item.name}
+          price={item.price}
+          image={item.image}
+          addToCart={addToCart}
+        />
+      ))}
+   </div>
+            
+  <div id="dashboard" className="cart-box">
 
     <h2 className="section-title">Cart: {cart.length === 0 && (
       <span className="cart-empty-text">
@@ -420,189 +420,21 @@ const sendToLine = () => {
 
       <button className="action-btn" onClick={clearCart}>  🗑  Clear Cart</button>
 
-      <button className="action-btn" onClick={submitOrder}> Submit Order </button>
+     
   </div>
    
    <div id="cart" className="cart-box">
         
        <input
           type="text"
-          placeholder="Enter your name"
+          placeholder="กรุณาใส่ชื่อคุณก่อนกดส่งออเดอร์"
           value={customerName}
           onChange={(e) => setCustomerName(e.target.value)}
        />
-   
+         
          <h3>Hello, {customerName}</h3>
+          <button className="action-btn" onClick={submitOrder}> Submit Order </button>
     </div>
-    
-        
-   <div id="menu" className="menu-grid">
-       {menu.map((item) => (
-        <MenuCard 
-          key={item.id}
-          id={item.id}
-          name={item.name}
-          price={item.price}
-          image={item.image}
-          addToCart={addToCart}
-        />
-      ))}
-   </div>
-            
-      <div id="cart" className="cart-box">
-    <div id="orders">
-        <h2 className="section-title"> Order History</h2>
-   
-   
-
-    {orders.length === 0 ? (
-      <div className="empty-state">
-        <div className="empty-icon">☕</div>
-            <h3>No orders yet </h3>
-            <p>when customers submit orders, they will appear here.</p>
-      </div>
-      
-    ) : (
-        filteredOrders.map((order) => (
-        <div key={order.id} className="order-card">
-          <h3>Order #{String(order.orderNumber).padStart(3,"0")}</h3>
-          <h3>Customer: {order.customerName}</h3>
-          <p>Total: {order.total} Baht</p>
-          <p className={`order-status ${
-            order.status === "Done" ? "done" : order.status === "Preparing"
-            ? "preparing" : "pending"
-          }`}
-          >
-             {order.status || "Pending"}</p>
-
-          <button
-            className="action-btn"
-            onClick={() =>
-                updateStatus(order.id, order.status || "Pending")
-            }
-          >
-           Update Status
-          </button>
-          <button
-          className="delete-btn"
-          onClick={() => deleteOrder(order.id)}>
-            Delete Order
-            </button>
-
-            <button className="action-btn" onClick={() => setSelectedOrder(order)}>
-              View Receipt
-            </button>
-
-          {order.items.map((item) => (
-            <p key={item.id}>
-              {item.name} x {item.quantity}
-            </p>
-))}            
-        </div>
-      ))
-   )}
-
-   </div>
-</div>
-              
-
-          
-   <div id="cart" className="cart-box">
-     <input 
-          type="text"
-          placeholder="Search customer..."
-          value={searchText}
-          onChange={(e) => setSeachText(e.target.value)}
-    />
-    <div className="stats-grid">
-      
-    
-        <div className="stats-box">
-          <p>Total Orders</p>
-          <h2>{totalOrders}</h2>
-        </div>
-
-        <div className="stats-box">
-          <p>Total Revenue</p>
-          <h2>{totalRevenue}</h2>
-        </div>
-
-        <div className="stats-box">
-          <p>Cups Sold</p>
-          <h2>{totalCupsSold}</h2>
-        </div>
-    </div>
-
-    <div className="chart-box">
-      <h2 className="section-title">
-           Cafe Analytics
-      </h2>
-
-      <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
-            <XAxis dataKey="name" />
-            <YAxis />
-          
-            <Bar dataKey="value" fill="#8b5e3c" radius={[14, 14, 0, 0]} />
-            <Tooltip contentStyle={{
-              borderRadius: "14px",
-              border: "none",
-              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.12)",
-            }}
-            />
-
-          </BarChart>
-      </ResponsiveContainer>
-
-    </div>
-
-          
-  {selectedOrder && (
-    <div className="modal-bg">
-    <div className="receipt-modal">
-
-         <h2>☕ Tui Cafe</h2>
-
-         <p className="receipt-date">
-             {selectedOrder.createdAt || "No date"}
-         </p>
-
-         <h3>
-           Receipt #{String(selectedOrder.orderNumber).padStart(3, "0")}
-         </h3>
-
-         <p>Customer: {selectedOrder.customerName}</p>
-
-         <div className="receipt-line"></div>
-
-         {selectedOrder.items.map((item, index) => (
-          <div key={index} className="receipt-row">
-            <span>{item.name} x {item.quantity}</span>
-            <span>{item.price * item.quantity}    THB</span>
-
-          </div>
-         ))}
-
-         <div className="receipt-line"></div>
-
-         <div className="receipt-total">
-          <span>Total</span>
-
-          <strong>{selectedOrder.total} THB</strong>
-         </div>
-
-         <button className="action-btn" onClick={() => setSelectedOrder(null)}>
-            Close
-         </button>
-
-         <button className="action-btn" onClick={() => window.print()}>
-          Print Receipt
-         </button>
-      </div>
-      </div>
- 
-  )}
-  </div>
   </div>
  
   ); 

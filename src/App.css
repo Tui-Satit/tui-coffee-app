@@ -291,7 +291,7 @@ button {
 
 .floating-cart {
   position: fixed;
-  top: 50px;
+  top: 30px;
   right: 80px;
   background: black;
   color: white;
