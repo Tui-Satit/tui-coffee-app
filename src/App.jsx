@@ -340,7 +340,7 @@ const sendToLine = () => {
   return (
 
     
-    <div className={darkMode ? "dark app-wrapper" : "app-wrapper"}>
+    <div className="container">
      <div className="navbar">
       <div className="logo">
             <h1>☕Tui Cafe </h1>

@@ -191,22 +191,73 @@ input {
 }
 
 @media (max-width: 600px) {
-  .app {
-  max-width: 600px;
+  .container {
+  max-width: 100%;
   margin: auto;
   padding: 20px 10px;
   padding-top: 10px;
+  background-color: grey;
 }
+
+body {
+  overflow: hidden;
+}
+
+.app {
+  padding: 10px;
+}
+
+
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0;
+  }
+
+  .card {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .coffee-img {
+    height: 140px;
+  }
+
+  .card h2 {
+    font-size: 18px;
+  }
+
+  .type-group,
+  .sweetness-group {
+    gap: 6px;
+  }
+
+  .option-btn {
+    font-size: 13px;
+    padding: 10px 6px;
+  }
+
+  .add-cart-btn {
+    font-size: 16px;
+    padding: 12px;
   }
 
   .navbar {
-    width: 100%;
-    margin: auto;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    padding: 14px;
+    box-sizing: border-box;
   }
 
+  h1 {
+    font-size: 42px;
+  }
 
+  .floating-cart {
+    right: 20px;
+    top: 20px;
+  }
 }
 
 .menu-card-content {
@@ -216,7 +267,7 @@ input {
 button {
   width: 100%;
   border: none;
-  padding: 12px;
+  padding: 5px;
   border-radius: 14px;
   background: #6f4e37;
   color: white;
