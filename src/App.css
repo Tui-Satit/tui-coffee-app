@@ -14,10 +14,11 @@ body {
   padding-bottom: 110px;
   min-height: 100vh;
   color: #2d221b;
+  overflow-x: hidden;
 }
 
 .header {
-  position: flex;
+ 
   align-items: center;
   justify-content: space-between;
 }
@@ -37,7 +38,7 @@ body {
   top: 0;
   z-index: 999;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   padding: 20px 40px;
   background: rgba(255, 255, 255, 0.65);
@@ -192,7 +193,9 @@ input {
 
 @media (max-width: 600px) {
   .menu-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 6px;
   }
 }
 
@@ -212,7 +215,7 @@ button {
 }
 
 .option-btn {
-  transition: all 0.2s ease;
+  transition: 0.5s;
 }
 
 .option-btn:hover {
@@ -227,6 +230,9 @@ button {
 
 .card {
   background: white;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
   padding: 20px;
   border-radius: 16px;
   margin-bottom: 20px;
@@ -237,7 +243,7 @@ button {
 
 .coffee-img {
   width: 100%;
-  height: 320px;
+  height: 100px;
   object-fit: cover;
   object-position: center;
   border-radius: 18px;
@@ -319,22 +325,6 @@ button {
 
 .card button {
   margin: 5px;
-}
-
-.active-hot {
-  background: #ff914d;
-  color: white;
-}
-
-.active-cold {
-  background: #4da6ff ;
-  color: white ;
-
-}
-
-.active-sweet {
-  background-color: #8b5cf6 !important;
-  color: white !important;
 }
 
 .active-link {
@@ -440,6 +430,7 @@ button {
 }
 
 .delete-btn {
+ 
   background: linear-gradient(
     135deg,
     #8b5e3c,
@@ -464,10 +455,6 @@ button {
   margin-top: 40px;
 }
 
-.menu-grid {
-  margin-top: 50px;
-}
-
 section {
   scroll-margin-top: 120px;
 }
@@ -488,14 +475,46 @@ section {
 }
 
 @media (max-width: 700px){
-  .navbar {
-    padding: 14px 18px;
-    flex-direction: column;
-    gap: 12px;
+   .app {
+    padding: 12px 8px;
   }
+ .navbar {
+  width: calc(100% - 16px);
+  margin: 8px auto;
+  padding: 14px;
+  box-sizing: border-box;
+ }
 
   .logo {
     font-size: 24px;
+  }
+
+  .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 6px;
+  }
+
+  .card {
+    padding: 10px;
+    border-radius: 18px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .coffee-img {
+    height: 110px;
+    border-radius: 14px;
+  }
+
+  .card h2 {
+    font-size: 18px;
+  }
+
+  .type-btn,
+  .sweet-btn {
+    min-width: 0;
   }
 
   .nav-links {
@@ -506,9 +525,8 @@ section {
 
   .floating-cart {
     top: 18px;
-    right: 81px;
-    font-size: 15px;
-    padding: 10px 14px;
+    right: 20px;
+    
   }
 
   h1 {
@@ -524,12 +542,24 @@ section {
   .section-title {
     font-size: 32px;
   }
+
+  .option-btn {
+    font-size: 12px;
+    padding: 10px 4px;
+  }
+
+  .type-group,
+    .sweetness-group {
+      width: 100%;
+      gap: 6px;
+    }
+  
 }
 
 @media (max-width: 900px) {
   .menu-grid {
-    grid-template-columns: 1fr;
-    padding: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 8px;
   }
 
   .stats-grid {
