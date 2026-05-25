@@ -418,7 +418,7 @@ const sendToLine = () => {
    
    
 
-      <button className="action-btn" onClick={clearCart}>  🗑  Clear Cart</button>
+      <button className="clear-cart-btn" onClick={clearCart}>  🗑  Clear Cart</button>
 
      
   </div>
@@ -433,7 +433,7 @@ const sendToLine = () => {
        />
          
          <h3>Hello, {customerName}</h3>
-          <button className="action-btn" onClick={submitOrder}> Submit Order </button>
+          <button className="submit-btn" onClick={submitOrder}> Submit Order </button>
     </div>
   </div>
  

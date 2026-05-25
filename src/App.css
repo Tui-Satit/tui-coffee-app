@@ -303,17 +303,52 @@ button {
 }
 
 .qty-buttons {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
   margin-top: 16px;
 }
 
 .qty-buttons button {
-  flex: 1;
-  max-width: 140px;
-  height: 48px;
-  font-size: 14px;
+  height: 54px;
+  border-radius: 999px;
+  background: #fffaf5;
+  color: #7b4b2c;
+  border: 2px solid #8b5a35;
+  font-size: 22px;
+  font-weight: 800;
+  box-shadow: 0 10px 22px rgba(80, 50, 20, 0.12);
+  transition: all 0.18s ease;
+}
+
+.cart-box .clear-cart-btn {
+  height: 58px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #8b5a35, #6f3f22);
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  box-shadow: 0 14px 30px rgba(111, 63, 34, 0.28);
+  transition: all 0.18s ease;
+}
+
+.cart-box .clear-cart-btn:active {
+  transform: scale(0.96);
+}
+
+.cart-box .submit-btn {
+  height: 58px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #8b5a35, #6f3f22);
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  box-shadow: 0 14px 30px rgba(111, 63, 34, 0.28);
+  transition: all 0.18s ease;
+}
+
+.cart-box .submit-btn:active {
+  transform: scale(0.96);
 }
 
 .floating-cart {
@@ -542,6 +577,7 @@ section {
   .type-btn,
   .sweet-btn {
     min-width: 0;
+  
   }
 
   .nav-links {
@@ -572,7 +608,7 @@ section {
 
   .option-btn {
     font-size: 11px;
-    padding: 8px 4px;
+    padding: 10px 5px 5px 5px;
   }
 
   .type-group,
@@ -1028,4 +1064,6 @@ section {
 .type-btn {
   min-height: 42px;
 }
+
+
 
