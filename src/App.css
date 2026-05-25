@@ -8,7 +8,7 @@ body {
     135deg,
     #f8f5f1,
     #f2ebe3,
-    #ede4da,
+    #ede4da
     
   );
   padding-bottom: 110px;
@@ -18,7 +18,7 @@ body {
 }
 
 .header {
- 
+  display: flex;
   align-items: center;
   justify-content: space-between;
 }
@@ -68,6 +68,8 @@ body {
   font-size: 16px;
   color: #6f5c4f;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .nav-links a {
@@ -160,8 +162,8 @@ input {
 }
 
 .menu-card:hover {
-  transform: translateY(-6px);
-  transform: scale(1.03);
+  
+  transform: translateY(-6px) scale(1.03);
 }
 
 .menu-card button{
@@ -229,7 +231,7 @@ button {
 
 .option-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0, 0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
  
 }
 
@@ -384,7 +386,7 @@ button {
 .stats-box:hover {
   transform: translateY(-10px);
   box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0, 0.14);
+    0 20px 40px rgba(0, 0, 0, 0.14);
    
 }
 
@@ -598,7 +600,7 @@ section {
 }
 
 .empty-state p{
-  font-family: 16px;
+  font-size: 16px;
   color: #7d6b5d;
   margin: 0;
 }
@@ -693,7 +695,7 @@ section {
   padding: 32px;
   border-radius: 28px;
   text-align: center;
-  box-shadow: 0 30 60px rgba(0, 0, 0, 0, 0.25);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
 }
 
 .receipt-modal p {
@@ -712,8 +714,8 @@ section {
   margin: 18px 0;
 }
 
-.recceipt-row,
-.eceipt-total {
+.receipt-row,
+.receipt-total {
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -845,9 +847,9 @@ section {
   color: #0e0500;
   padding: 20px 24px;
   border-radius: 24px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0, 0.22);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
   z-index: 99999;
-  animation: popupIn 0.200s ease;
+  animation: popupIn 0.2s ease;
   border-left: 0px solid #22c55e;
 }
 
@@ -892,18 +894,6 @@ section {
   font-weight: bold;
 }
 
-.active-hot {
-  background: #ff914d;
-}
-
-.active-cold {
-  background: #4da6ff;
-}
-
-.active-sweet {
-  background: #a855f7;
-}
-
 .history-title {
   margin-top: 50px;
 }
@@ -945,10 +935,6 @@ section {
   background: #22c55e;
   color: white;
   border: none;
-}
-
-.option-btn {
-  transition: 0.5s;
 }
 
 .sweetness-group {
