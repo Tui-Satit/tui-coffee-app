@@ -399,7 +399,7 @@ const sendToLine = () => {
             {item.price} x {item.quantity}
           </p>
 
-          <div>
+          <div className="qty-buttons">
             <button onClick={() => decreaseQuantity(item.id)}>
               -
             </button>
